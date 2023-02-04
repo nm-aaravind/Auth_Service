@@ -4,6 +4,7 @@ const UserController=require("../../controllers/user_controller")
 const {AuthRequestValidators}=require("../../middlewares/index")
 
 router.post("/signup",AuthRequestValidators.validateUserAuth,UserController.create);
-router.get("/user/:id",UserController.getById)
-router.post("/signin",AuthRequestValidators.validateUserAuth,UserController.signIn)
+router.get("/user/:id",UserController.getById);
+router.post("/signin",AuthRequestValidators.validateUserAuth,UserController.signIn);
+router.get("/isAuthenticated",UserController.isAuthenticated)
 module.exports=router;

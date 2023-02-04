@@ -8,7 +8,6 @@ class UserService{
     }
     async create(data){
         try {
-            console.log(data);
             const result=await this.UserRepository.create(data);
             return result;
         } catch (error) {
@@ -43,7 +42,7 @@ class UserService{
     }
     verifyToken(token){
         try {
-            const result=jew.verify(token,JWT_KEY);
+            const result=jwt.verify(token,JWT_KEY);
             return result
         } catch (error) {
             console.log("Got error in verifying token")
@@ -59,11 +58,21 @@ class UserService{
             throw error;
         }
     }
+    async isAuthenticated(token){
+        const response=this.verifyToken(token);
+        if(!response){
+            throw {error:"Cannot verify token"}
+        }
+        const user=await this.UserRepository.getById(response.id);
+        if(!user){
+            throw {error:"No user with given details"}
+        }
+        return user.id;
 
+    }
     async signIn(email,plainpassword){
         try {
             const result=await this.UserRepository.getByEmail(email);
-            console.log(result)
             const passwordmatch=this.checkPassword(plainpassword,result.password);
             if(!passwordmatch){
                 console.log("Password doesnt match");
