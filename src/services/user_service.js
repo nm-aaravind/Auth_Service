@@ -11,7 +11,10 @@ class UserService{
             const result=await this.UserRepository.create(data);
             return result;
         } catch (error) {
-            console.log("Got error in service of create")
+            if(error.name=="SequelizeValidationError"){
+                throw error;
+            }
+            console.log("Got error in service layer of create user")
         }
     }
     async destory(userId){
@@ -81,8 +84,19 @@ class UserService{
             const newJWT=this.createToken({email:result.email,id:result.id});
             return newJWT;
         } catch (error) {
+            if(error.name=="Attribute Not found"){
+                throw error;
+            }
             console.log("Got error in sign in")
             throw error;
+        }
+    }
+    async isAdmin(userId){
+        try {
+            const result=this.UserRepository.isAdmin(userId);
+            return result;
+        } catch (error) {
+            console.log("Got error in service of isadmin",error)
         }
     }
 }

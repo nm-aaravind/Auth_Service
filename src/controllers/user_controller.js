@@ -10,9 +10,9 @@ const create=async(req,res)=>{
             message:"Created User"
         })
     } catch (error) {
-        return res.status(500).json({
+        return res.status(error.statusCode).json({
             success:false,
-            message:"Cannot create User"
+            message:error.explanation
         })
     }
 }
@@ -40,10 +40,10 @@ const signIn=async(req,res)=>{
             message:"Token created"
         })
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({
+        return res.status(error.statusCode).json({
             success:false,
-            message:"Cannot sign In"
+            message:error.message,
+            explanation:error.explanation
         })
     }
 }
@@ -63,6 +63,18 @@ const isAuthenticated=async(req,res)=>{
         })
     }
 }
+const isAdmin=async(req,res)=>{
+    try {
+        const result=await userService.isAdmin(req.body.userId);
+        return res.status(200).json({
+            data:result,
+            success:true,
+            message:"Fetched whether is admin or not"
+        })
+    } catch (error) {
+        console.log("Got error in isadmin of controller", error)
+    }
+}
 module.exports={
-    create,getById,signIn,isAuthenticated
+    create,getById,signIn,isAuthenticated,isAdmin
 }

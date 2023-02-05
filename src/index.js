@@ -4,8 +4,9 @@ const db=require("./models/index")
 const router=require("./routes/index")
 const bodyParser=require("body-parser");
 const app=express();
+
 const prepareAndStartServer=()=>{
-    app.listen(PORT,()=>{
+    app.listen(PORT,async()=>{
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({extended:true}));
         app.use("/api",router)
